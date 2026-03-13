@@ -1,0 +1,372 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=Inter:wght@300;400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:#04080f;color:#e8f0fe;overflow-x:hidden}
+  canvas#space{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  .wrap{position:relative;z-index:1}
+
+  nav{display:flex;justify-content:space-between;align-items:center;padding:24px 48px;position:sticky;top:0;z-index:100;background:rgba(4,8,15,0.8);backdrop-filter:blur(14px);border-bottom:1px solid rgba(100,160,255,0.08)}
+  .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#7eb8ff;letter-spacing:-0.5px}
+  .nav-links{display:flex;gap:28px}
+  .nav-links a{font-size:13px;color:rgba(232,240,254,0.45);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s}
+  .nav-links a:hover{color:#7eb8ff}
+  .nav-cta{font-size:13px;padding:8px 20px;border-radius:40px;background:#3b82f6;color:#fff;font-weight:500;text-decoration:none}
+
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 48px}
+  .hero-label{font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#3b82f6;margin-bottom:16px;font-weight:500}
+  .hero h1{font-family:'Syne',sans-serif;font-size:72px;font-weight:800;line-height:1.0;letter-spacing:-3px;margin-bottom:16px;max-width:700px}
+  .hero h1 .acc{color:#3b82f6}.hero h1 .acc2{color:#818cf8}
+  .typing-wrap{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:#7eb8ff;margin-bottom:16px;min-height:40px;letter-spacing:-0.5px}
+  .cursor{display:inline-block;width:3px;height:1em;background:#3b82f6;margin-left:3px;vertical-align:middle;animation:blink 0.8s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  .hero-sub{font-size:14px;color:rgba(232,240,254,0.4);margin-bottom:32px}
+  .hero p.bio{font-size:16px;color:rgba(232,240,254,0.55);line-height:1.75;max-width:480px;margin-bottom:40px;font-weight:300}
+  .hero-btns{display:flex;gap:16px;flex-wrap:wrap}
+  .btn-blue{padding:13px 30px;background:#3b82f6;color:#fff;font-weight:500;font-size:14px;border-radius:40px;text-decoration:none;box-shadow:0 0 24px rgba(59,130,246,0.35)}
+  .btn-ghost{padding:13px 30px;border:1px solid rgba(100,160,255,0.25);color:#e8f0fe;font-size:14px;border-radius:40px;text-decoration:none}
+  .scroll-hint{margin-top:48px;font-size:11px;color:rgba(232,240,254,0.2);letter-spacing:0.1em;text-transform:uppercase}
+
+  .ticker-wrap{background:rgba(15,42,94,0.55);padding:14px 0;overflow:hidden;border-top:1px solid rgba(100,160,255,0.1);border-bottom:1px solid rgba(100,160,255,0.1)}
+  .ticker{display:inline-flex;gap:48px;animation:tick 24s linear infinite;white-space:nowrap}
+  @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  .t-item{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#7eb8ff;letter-spacing:0.05em}
+  .t-sep{color:rgba(126,184,255,0.3)}
+
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:64px;padding:100px 48px;align-items:center}
+  .section-tag{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#818cf8;margin-bottom:18px;font-weight:500}
+  .sec-title{font-family:'Syne',sans-serif;font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:8px}
+  .about p{font-size:15px;color:rgba(232,240,254,0.55);line-height:1.8;font-weight:300}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .stat{background:rgba(255,255,255,0.03);border:1px solid rgba(100,160,255,0.1);border-radius:16px;padding:26px 22px}
+  .stat.blue{background:rgba(59,130,246,0.12);border-color:rgba(59,130,246,0.3)}
+  .stat.purple{background:rgba(129,140,248,0.1);border-color:rgba(129,140,248,0.25)}
+  .stat-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:#7eb8ff;margin-bottom:4px}
+  .stat.purple .stat-num{color:#818cf8}
+  .stat-lbl{font-size:12px;color:rgba(232,240,254,0.35)}
+
+  .skills-sec{padding:80px 48px}
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:48px}
+  .skill-label{display:flex;justify-content:space-between;margin-bottom:10px}
+  .skill-name{font-size:14px;font-weight:500;color:#e8f0fe}
+  .skill-pct{font-size:13px;color:#7eb8ff;font-weight:500}
+  .skill-track{background:rgba(255,255,255,0.06);height:6px;border-radius:40px;overflow:hidden}
+  .skill-fill{height:100%;border-radius:40px;background:linear-gradient(90deg,#3b82f6,#818cf8);width:0;transition:width 1.4s cubic-bezier(0.4,0,0.2,1)}
+
+  .projects{padding:80px 48px}
+  .proj-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .pc{border-radius:20px;padding:32px;position:relative;min-height:220px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid rgba(100,160,255,0.1);background:rgba(255,255,255,0.02)}
+  .pc.full{grid-column:span 2}
+  .pc-num{position:absolute;top:24px;left:28px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:rgba(126,184,255,0.2);letter-spacing:0.1em}
+  .ptags{display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap}
+  .ptag{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid rgba(126,184,255,0.2);color:#7eb8ff}
+  .pc-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.3px;margin-bottom:6px}
+  .pc-desc{font-size:13px;color:rgba(232,240,254,0.4);line-height:1.6;font-weight:300}
+
+  /* ── CERTIFICATES ── */
+  .certs-sec{padding:80px 48px}
+  .certs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+  .cert-card{border-radius:18px;border:1px solid rgba(100,160,255,0.12);background:rgba(255,255,255,0.02);padding:28px 24px;display:flex;flex-direction:column;gap:14px;transition:border-color 0.2s,background 0.2s;cursor:pointer;position:relative;overflow:hidden}
+  .cert-card:hover{border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.05)}
+  .cert-icon{width:44px;height:44px;border-radius:12px;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.25);display:flex;align-items:center;justify-content:center;font-size:20px}
+  .cert-upload-icon{width:44px;height:44px;border-radius:12px;background:rgba(129,140,248,0.12);border:1px dashed rgba(129,140,248,0.35);display:flex;align-items:center;justify-content:center;font-size:18px}
+  .cert-body{flex:1}
+  .cert-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px;color:#e8f0fe}
+  .cert-issuer{font-size:12px;color:rgba(232,240,254,0.4);margin-bottom:4px}
+  .cert-date{font-size:11px;color:#7eb8ff;font-weight:500}
+  .cert-badge{position:absolute;top:18px;right:18px;font-size:10px;padding:3px 9px;border-radius:20px;background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.3);color:#7eb8ff;font-weight:500}
+  .cert-add{border:1.5px dashed rgba(100,160,255,0.18);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:160px;cursor:pointer;transition:border-color 0.2s,background 0.2s}
+  .cert-add:hover{border-color:rgba(59,130,246,0.45);background:rgba(59,130,246,0.04)}
+  .cert-add-label{font-size:13px;color:rgba(232,240,254,0.35);text-align:center}
+  .cert-add-sub{font-size:11px;color:rgba(232,240,254,0.2);text-align:center}
+  .cert-add input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+  /* ── RESUME ── */
+  .resume-sec{padding:80px 48px}
+  .resume-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:48px;align-items:start}
+  .resume-upload-zone{border:1.5px dashed rgba(100,160,255,0.2);border-radius:20px;padding:48px 32px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;position:relative;cursor:pointer;transition:border-color 0.25s,background 0.25s;background:rgba(255,255,255,0.01);min-height:240px}
+  .resume-upload-zone:hover,.resume-upload-zone.drag{border-color:rgba(59,130,246,0.5);background:rgba(59,130,246,0.05)}
+  .resume-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+  .upload-icon{width:56px;height:56px;border-radius:50%;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);display:flex;align-items:center;justify-content:center;font-size:24px}
+  .upload-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:#e8f0fe}
+  .upload-sub{font-size:13px;color:rgba(232,240,254,0.35);text-align:center;line-height:1.6}
+  .upload-types{display:flex;gap:8px;margin-top:4px}
+  .upload-type{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(100,160,255,0.15);color:rgba(232,240,254,0.4)}
+  #resume-preview{display:none;flex-direction:column;gap:12px}
+  .resume-file-card{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:14px;padding:18px 20px;display:flex;align-items:center;gap:14px}
+  .resume-file-icon{font-size:28px}
+  .resume-file-name{font-size:14px;font-weight:500;color:#e8f0fe;word-break:break-all}
+  .resume-file-size{font-size:12px;color:rgba(232,240,254,0.35);margin-top:3px}
+  .resume-actions{display:flex;gap:12px;margin-top:4px}
+  .btn-resume-dl{padding:10px 22px;background:#3b82f6;color:#fff;font-size:13px;font-weight:500;border-radius:40px;border:none;cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif}
+  .btn-resume-rm{padding:10px 18px;background:transparent;color:rgba(232,240,254,0.4);font-size:13px;border:1px solid rgba(100,160,255,0.15);border-radius:40px;cursor:pointer;font-family:'Inter',sans-serif}
+  .resume-tips{display:flex;flex-direction:column;gap:16px}
+  .resume-tip{display:flex;gap:14px;align-items:flex-start}
+  .tip-icon{width:36px;height:36px;min-width:36px;border-radius:10px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);display:flex;align-items:center;justify-content:center;font-size:15px;margin-top:2px}
+  .tip-text p:first-child{font-size:14px;font-weight:500;color:#e8f0fe;margin-bottom:3px}
+  .tip-text p:last-child{font-size:13px;color:rgba(232,240,254,0.4);line-height:1.5}
+
+  .contact-sec{padding:80px 48px}
+  .contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:48px;align-items:start}
+  .contact-info p{font-size:15px;color:rgba(232,240,254,0.5);line-height:1.8;font-weight:300;margin-bottom:32px}
+  .contact-links{display:flex;flex-direction:column;gap:14px}
+  .clink{display:flex;align-items:center;gap:12px;font-size:14px;color:rgba(232,240,254,0.5);text-decoration:none;transition:color 0.2s}
+  .clink:hover{color:#7eb8ff}
+  .clink-icon{width:36px;height:36px;border-radius:50%;border:1px solid rgba(100,160,255,0.15);display:flex;align-items:center;justify-content:center;font-size:15px}
+  form{display:flex;flex-direction:column;gap:14px}
+  input,textarea{background:rgba(255,255,255,0.04);border:1px solid rgba(100,160,255,0.12);border-radius:10px;padding:12px 16px;color:#e8f0fe;font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border 0.2s}
+  input:focus,textarea:focus{border-color:rgba(59,130,246,0.45)}
+  textarea{resize:vertical;min-height:110px}
+  input::placeholder,textarea::placeholder{color:rgba(232,240,254,0.25)}
+  .btn-submit{padding:13px 30px;background:#3b82f6;color:#fff;font-weight:500;font-size:14px;border-radius:40px;border:none;cursor:pointer;box-shadow:0 0 20px rgba(59,130,246,0.3);align-self:flex-start;font-family:'Inter',sans-serif}
+
+  footer{padding:24px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(100,160,255,0.07)}
+  footer p{font-size:12px;color:rgba(232,240,254,0.2)}
+</style>
+
+<canvas id="space"></canvas>
+
+<div class="wrap">
+  <nav>
+    <span class="nav-logo"> AYUSH SHUKLA</span>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#certs">Certificates</a>
+      <a href="#resume">Resume</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="nav-cta" href="#contact">Let's Connect</a>
+  </nav>
+
+  <div class="hero">
+    <p class="hero-label">Full Stack & AI Engineer</p>
+    <h1>Hello, I'm<br><span class="acc">Ayush</span> <span class="acc2">Shukla</span></h1>
+    <div class="typing-wrap"><span id="typing"></span><span class="cursor"></span></div>
+    <p class="hero-sub">Sophomore Year @ VIT Bhopal &nbsp;·&nbsp; Open to Work</p>
+    <p class="bio">I build scalable web applications and intelligent systems — passionate about full stack development and AI engineering.</p>
+    <div class="hero-btns">
+      <a class="btn-blue" href="#contact">Let's Connect</a>
+      <a class="btn-ghost" href="#projects">View Projects</a>
+    </div>
+    <p class="scroll-hint">↓ scroll to explore</p>
+  </div>
+
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span class="t-item">React</span><span class="t-sep">✦</span><span class="t-item">JavaScript</span><span class="t-sep">✦</span><span class="t-item">Node.js</span><span class="t-sep">✦</span><span class="t-item">Express</span><span class="t-sep">✦</span><span class="t-item">Python</span><span class="t-sep">✦</span><span class="t-item">TensorFlow</span><span class="t-sep">✦</span><span class="t-item">MongoDB</span><span class="t-sep">✦</span><span class="t-item">SQL</span><span class="t-sep">✦</span><span class="t-item">HTML</span><span class="t-sep">✦</span><span class="t-item">CSS</span><span class="t-sep">✦</span>
+      <span class="t-item">React</span><span class="t-sep">✦</span><span class="t-item">JavaScript</span><span class="t-sep">✦</span><span class="t-item">Node.js</span><span class="t-sep">✦</span><span class="t-item">Express</span><span class="t-sep">✦</span><span class="t-item">Python</span><span class="t-sep">✦</span><span class="t-item">TensorFlow</span><span class="t-sep">✦</span><span class="t-item">MongoDB</span><span class="t-sep">✦</span><span class="t-item">SQL</span><span class="t-sep">✦</span><span class="t-item">HTML</span><span class="t-sep">✦</span><span class="t-item">CSS</span><span class="t-sep">✦</span>
+    </div>
+  </div>
+
+  <div class="about" id="about">
+    <div>
+      <p class="section-tag">About me</p>
+      <h2 class="sec-title">Full Stack &<br>AI Engineer</h2>
+      <p style="margin-top:22px">I'm Ayush Shukla, a passionate Full Stack and AI Engineer building scalable web applications and intelligent systems. Currently in my second year at VIT Bhopal and actively open to opportunities.</p>
+    </div>
+    <div class="stats">
+      <div class="stat blue"><div class="stat-num">2nd</div><div class="stat-lbl">Year @ VIT Bhopal</div></div>
+      <div class="stat"><div class="stat-num">90%</div><div class="stat-lbl">Frontend proficiency</div></div>
+      <div class="stat purple"><div class="stat-num">4</div><div class="stat-lbl">Core tech stacks</div></div>
+      <div class="stat"><div class="stat-num">∞</div><div class="stat-lbl">Ideas to build</div></div>
+    </div>
+  </div>
+
+  <div class="skills-sec" id="skills">
+    <p class="section-tag">What I know</p>
+    <h2 class="sec-title">Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-item"><div class="skill-label"><span class="skill-name">Frontend — React, JS, HTML, CSS</span><span class="skill-pct">90%</span></div><div class="skill-track"><div class="skill-fill" data-w="90%"></div></div></div>
+      <div class="skill-item"><div class="skill-label"><span class="skill-name">Backend — Node.js, Express</span><span class="skill-pct">85%</span></div><div class="skill-track"><div class="skill-fill" data-w="85%"></div></div></div>
+      <div class="skill-item"><div class="skill-label"><span class="skill-name">AI / ML — Python, TensorFlow</span><span class="skill-pct">80%</span></div><div class="skill-track"><div class="skill-fill" data-w="80%"></div></div></div>
+      <div class="skill-item"><div class="skill-label"><span class="skill-name">Database — MongoDB, SQL</span><span class="skill-pct">85%</span></div><div class="skill-track"><div class="skill-fill" data-w="85%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="projects" id="projects">
+    <div class="proj-head">
+      <div><p class="section-tag">What I've built</p><h2 class="sec-title">Projects</h2></div>
+    </div>
+    <div class="pgrid">
+      <div class="pc"><span class="pc-num">01</span><div class="ptags"><span class="ptag">React</span><span class="ptag">Node.js</span><span class="ptag">MongoDB</span></div><p class="pc-title">Full Stack Web App</p><p class="pc-desc">A scalable web application built with the MERN stack — clean UI, RESTful backend, and persistent data layer.</p></div>
+      <div class="pc"><span class="pc-num">02</span><div class="ptags"><span class="ptag">Python</span><span class="ptag">TensorFlow</span><span class="ptag">ML</span></div><p class="pc-title">AI / ML System</p><p class="pc-desc">An intelligent system built with Python and TensorFlow — trained models for real-world prediction tasks.</p></div>
+      <div class="pc full"><span class="pc-num">03</span><div class="ptags"><span class="ptag">Express</span><span class="ptag">SQL</span><span class="ptag">REST API</span></div><p class="pc-title">Backend API & Database Integration</p><p class="pc-desc">A production-ready REST API with Express.js, structured SQL schema, authentication, and full CRUD operations.</p></div>
+    </div>
+  </div>
+
+  <!-- CERTIFICATES -->
+  <div class="certs-sec" id="certs">
+    <p class="section-tag">Achievements</p>
+    <h2 class="sec-title">Certificates</h2>
+    <div class="certs-grid" id="certs-grid">
+      <!-- Placeholder cards -->
+      <div class="cert-card" id="cert-placeholder-1">
+        <div class="cert-icon">🏆</div>
+        <div class="cert-body">
+          <p class="cert-title">Your Certificate</p>
+          <p class="cert-issuer">Issuer Name</p>
+          <p class="cert-date">Month Year</p>
+        </div>
+        <span class="cert-badge">Verified</span>
+      </div>
+      <div class="cert-card" id="cert-placeholder-2">
+        <div class="cert-icon">🎓</div>
+        <div class="cert-body">
+          <p class="cert-title">Your Certificate</p>
+          <p class="cert-issuer">Issuer Name</p>
+          <p class="cert-date">Month Year</p>
+        </div>
+        <span class="cert-badge">Verified</span>
+      </div>
+      <!-- Add certificate card -->
+      <div class="cert-card cert-add" id="cert-add-btn" style="position:relative;min-height:160px">
+        <input type="file" id="cert-file-input" accept="image/*,.pdf" multiple>
+        <div class="cert-upload-icon">＋</div>
+        <p class="cert-add-label">Upload Certificate</p>
+        <p class="cert-add-sub">PNG, JPG or PDF</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUME -->
+  <div class="resume-sec" id="resume">
+    <p class="section-tag">My Resume</p>
+    <h2 class="sec-title">Resume</h2>
+    <div class="resume-inner">
+      <div>
+        <div class="resume-upload-zone" id="resume-zone">
+          <input type="file" id="resume-input" accept=".pdf,.doc,.docx">
+          <div class="upload-icon">📄</div>
+          <p class="upload-title">Drop your resume here</p>
+          <p class="upload-sub">Drag & drop or click to browse</p>
+          <div class="upload-types">
+            <span class="upload-type">PDF</span>
+            <span class="upload-type">DOC</span>
+            <span class="upload-type">DOCX</span>
+          </div>
+        </div>
+        <div id="resume-preview">
+          <div class="resume-file-card">
+            <span class="resume-file-icon">📄</span>
+            <div>
+              <p class="resume-file-name" id="resume-name">—</p>
+              <p class="resume-file-size" id="resume-size">—</p>
+            </div>
+          </div>
+          <div class="resume-actions">
+            <a class="btn-resume-dl" id="resume-dl" href="#" download>Download Resume</a>
+            <button class="btn-resume-rm" id="resume-rm">Remove</button>
+          </div>
+        </div>
+      </div>
+      <div class="resume-tips">
+        <div class="resume-tip"><div class="tip-icon">✅</div><div class="tip-text"><p>Keep it one page</p><p>Recruiters spend ~7 seconds on a resume — make every line count.</p></div></div>
+        <div class="resume-tip"><div class="tip-icon">🎯</div><div class="tip-text"><p>Tailor for each role</p><p>Highlight the skills and projects most relevant to the job you're applying for.</p></div></div>
+        <div class="resume-tip"><div class="tip-icon">🔗</div><div class="tip-text"><p>Link your work</p><p>Include GitHub, portfolio, and LinkedIn so recruiters can explore further.</p></div></div>
+        <div class="resume-tip"><div class="tip-icon">📐</div><div class="tip-text"><p>Clean formatting</p><p>Use consistent fonts, spacing, and clear section headings for easy scanning.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-sec" id="contact">
+    <p class="section-tag">Get in touch</p>
+    <h2 class="sec-title">Contact Me</h2>
+    <div class="contact-wrap">
+      <div class="contact-info">
+        <p>Open to full-time roles, internships, and freelance projects. If you have an idea or opportunity, I'd love to hear from you.</p>
+        <div class="contact-links">
+          <a class="clink" href="mailto:24ayushshukla@email.com"><span class="clink-icon">✉</span>24ayushshukla@email.com</a>
+          <a class="clink" href="https://www.linkedin.com/in/ayushshukla24/"><span class="clink-icon">💼</span>LinkedIn</a>
+          <a class="clink" href="https://github.com/ayush24shukla"><span class="clink-icon">🐙</span>GitHub</a>
+        </div>
+      </div>
+      <form action="https://formspree.io/f/YOUR_ID" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <textarea name="message" placeholder="Your Message" required></textarea>
+        <button type="submit" class="btn-submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Ayush Shukla</p>
+  </footer>
+</div>
+
+<script>
+/* ── SPACE BACKGROUND ── */
+const c=document.getElementById('space'),ctx=c.getContext('2d');
+let W,H,stars=[],galaxies=[];
+function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+function initStars(){stars=[];for(let i=0;i<280;i++){const s={x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.2+0.2,baseO:Math.random()*0.6+0.15,vx:(Math.random()-0.5)*0.12,vy:(Math.random()-0.5)*0.10,twinkleSpeed:Math.random()*0.018+0.004,twinklePhase:Math.random()*Math.PI*2,ox:Math.random()*12+4,oy:Math.random()*10+3,oscSpeed:Math.random()*0.006+0.001,oscPhase:Math.random()*Math.PI*2,cx:0,cy:0};s.cx=s.x;s.cy=s.y;stars.push(s)}}
+function initGalaxies(){galaxies=[{cx:W*0.80,cy:H*0.25,radius:190,angle:0.4,tilt:0.28,hue:210},{cx:W*0.10,cy:H*0.75,radius:140,angle:-0.6,tilt:0.32,hue:230},{cx:W*0.55,cy:H*1.50,radius:170,angle:0.2,tilt:0.25,hue:200}]}
+function drawGalaxy(g){ctx.save();ctx.translate(g.cx,g.cy);ctx.rotate(g.angle);const grd=ctx.createRadialGradient(0,0,0,0,0,g.radius*0.35);grd.addColorStop(0,`hsla(${g.hue},80%,75%,0.18)`);grd.addColorStop(1,`hsla(${g.hue},60%,50%,0)`);ctx.fillStyle=grd;ctx.beginPath();ctx.ellipse(0,0,g.radius*0.35,g.radius*0.35*g.tilt,0,0,Math.PI*2);ctx.fill();for(let arm=0;arm<2;arm++){const ao=arm*Math.PI;for(let i=0;i<420;i++){const t=i/420,dist=t*g.radius,spin=t*3.8+ao,spread=(Math.random()-0.5)*dist*0.38,x=Math.cos(spin)*dist+spread,y=Math.sin(spin)*dist*g.tilt+(Math.random()-0.5)*dist*0.12,alpha=(1-t)*(0.55+Math.random()*0.3);ctx.beginPath();ctx.arc(x,y,Math.random()*1.4+0.2,0,Math.PI*2);ctx.fillStyle=`hsla(${g.hue+Math.random()*30-10},75%,${60+Math.random()*30}%,${alpha*0.7})`;ctx.fill()}}for(let i=0;i<80;i++){const a=Math.random()*Math.PI*2,d=Math.random()*g.radius*0.25;ctx.beginPath();ctx.arc(Math.cos(a)*d,Math.sin(a)*d*g.tilt,Math.random()*0.9+0.1,0,Math.PI*2);ctx.fillStyle=`hsla(${g.hue+20},90%,90%,${Math.random()*0.5+0.1})`;ctx.fill()}ctx.restore()}
+let T=0;
+function draw(){ctx.clearRect(0,0,W,H);T+=0.016;stars.forEach(s=>{s.cx+=s.vx;s.cy+=s.vy;if(s.cx<-50)s.cx=W+50;if(s.cx>W+50)s.cx=-50;if(s.cy<-50)s.cy=H+50;if(s.cy>H+50)s.cy=-50;const fx=s.cx+Math.sin(T*s.oscSpeed+s.oscPhase)*s.ox,fy=s.cy+Math.cos(T*s.oscSpeed*0.7+s.oscPhase)*s.oy,tw=0.3+0.7*(0.5+0.5*Math.sin(T*s.twinkleSpeed*60+s.twinklePhase)),op=s.baseO*tw;if(s.r>1.1){ctx.strokeStyle=`rgba(190,215,255,${op*0.35})`;ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(fx-s.r*2.5,fy);ctx.lineTo(fx+s.r*2.5,fy);ctx.stroke();ctx.beginPath();ctx.moveTo(fx,fy-s.r*2.5);ctx.lineTo(fx,fy+s.r*2.5);ctx.stroke()}ctx.beginPath();ctx.arc(fx,fy,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(190,215,255,${op})`;ctx.fill()});galaxies.forEach(g=>drawGalaxy(g));requestAnimationFrame(draw)}
+resize();initStars();initGalaxies();draw();
+window.addEventListener('resize',()=>{resize();initStars();initGalaxies()});
+
+/* ── TYPING ── */
+const textArray=["Full Stack Engineer","AI Engineer","Open to Work"];
+let tIdx=0,cIdx=0;
+const el=document.getElementById('typing');
+function typeChar(){if(cIdx<textArray[tIdx].length){el.textContent+=textArray[tIdx].charAt(cIdx);cIdx++;setTimeout(typeChar,100)}else setTimeout(eraseChar,1600)}
+function eraseChar(){if(cIdx>0){el.textContent=textArray[tIdx].substring(0,cIdx-1);cIdx--;setTimeout(eraseChar,50)}else{tIdx=(tIdx+1)%textArray.length;setTimeout(typeChar,500)}}
+setTimeout(typeChar,800);
+
+/* ── SKILL BARS ── */
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)document.querySelectorAll('.skill-fill').forEach(f=>f.style.width=f.getAttribute('data-w'))})},{threshold:0.3});
+const sg=document.querySelector('.skills-grid');if(sg)obs.observe(sg);
+
+/* ── CERTIFICATE UPLOAD ── */
+document.getElementById('cert-file-input').addEventListener('change',function(){
+  const grid=document.getElementById('certs-grid');
+  const addBtn=document.getElementById('cert-add-btn');
+  Array.from(this.files).forEach(file=>{
+    const card=document.createElement('div');
+    card.className='cert-card';
+    const isImg=file.type.startsWith('image/');
+    const url=URL.createObjectURL(file);
+    card.innerHTML=`
+      <div class="cert-icon">${isImg?'🖼️':'📄'}</div>
+      <div class="cert-body">
+        <p class="cert-title">${file.name.replace(/\.[^.]+$/,'')}</p>
+        <p class="cert-issuer">Uploaded by you</p>
+        <p class="cert-date">${new Date().toLocaleDateString('en-US',{month:'short',year:'numeric'})}</p>
+      </div>
+      <span class="cert-badge">New</span>
+      <a href="${url}" download="${file.name}" style="position:absolute;bottom:18px;right:18px;font-size:11px;color:#7eb8ff;text-decoration:none;border-bottom:1px solid rgba(126,184,255,0.3);padding-bottom:2px">Download</a>
+    `;
+    grid.insertBefore(card,addBtn);
+  });
+  this.value='';
+});
+
+/* ── RESUME UPLOAD ── */
+const resumeInput=document.getElementById('resume-input');
+const resumeZone=document.getElementById('resume-zone');
+const resumePreview=document.getElementById('resume-preview');
+const resumeName=document.getElementById('resume-name');
+const resumeSize=document.getElementById('resume-size');
+const resumeDl=document.getElementById('resume-dl');
+const resumeRm=document.getElementById('resume-rm');
+
+function showResume(file){
+  const url=URL.createObjectURL(file);
+  resumeName.textContent=file.name;
+  resumeSize.textContent=(file.size/1024).toFixed(1)+' KB';
+  resumeDl.href=url;
+  resumeDl.download=file.name;
+  resumeZone.style.display='none';
+  resumePreview.style.display='flex';
+}
+resumeInput.addEventListener('change',function(){if(this.files[0])showResume(this.files[0])});
+resumeRm.addEventListener('click',()=>{resumeZone.style.display='flex';resumePreview.style.display='none';resumeInput.value=''});
+resumeZone.addEventListener('dragover',e=>{e.preventDefault();resumeZone.classList.add('drag')});
+resumeZone.addEventListener('dragleave',()=>resumeZone.classList.remove('drag'));
+resumeZone.addEventListener('drop',e=>{e.preventDefault();resumeZone.classList.remove('drag');if(e.dataTransfer.files[0])showResume(e.dataTransfer.files[0])});
+</script>
